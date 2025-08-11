@@ -1,19 +1,19 @@
 from ..core.parser import Parser
-from ..core.calculator import Calculator
+from ..core.evaluator import Evaluator
 
 def main():
     user_input = input()
     
     parser = Parser()
+    evaluator = Evaluator()
+
     tokens = parser.parse(user_input)    
     
-    # print(tokens)
+    # print([token.value for token in tokens])
     
-    calculator = Calculator()
+    result = evaluator.evaluate(tokens)
     
-    result = calculator.calculate(tokens)
-    
-    # print(result)
+    print(result)
 
 if __name__ == "__main__":
     main()
