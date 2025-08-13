@@ -9,7 +9,7 @@ def main():
 
     tokens = parser.parse(user_input)    
     
-    # print([token.value for token in tokens])
+    print([token.value for token in tokens])
     
     result = evaluator.evaluate(tokens)
     

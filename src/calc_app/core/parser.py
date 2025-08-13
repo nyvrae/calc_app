@@ -2,10 +2,11 @@ import re
 from .constants import Token, OPERATOR_PRECEDENCE
 
 from typing import List
+import math
 
 class Parser:
     def __init__(self):
-        self._pattern = re.compile(r"(\d+\.?\d*)|([+\-*/])|(\^)|([()])")
+        self._pattern = re.compile(r"(\d+\.?\d*)|([+\-*/])|(\^)|([()])|(pi|e)|([a-zA-Z_][a-zA-Z_]*)")
         
     def _to_rpn(self, tokens: List[Token]) -> List[Token]:
         output_queue = []
@@ -30,8 +31,9 @@ class Parser:
             elif token.type == "RPAREN":
                 while operator_stack and operator_stack[-1].type != "LPAREN":
                     output_queue.append(operator_stack.pop())
-                if operator_stack and operator_stack[-1].type == "LPAREN":
-                    operator_stack.pop()
+                operator_stack.pop()
+                if operator_stack and operator_stack[-1].type == "FUNCTION":
+                    output_queue.append(operator_stack.pop())
 
         while operator_stack:
             output_queue.append(operator_stack.pop())
@@ -49,7 +51,7 @@ class Parser:
         
         tokens = []
 
-        for number, left_op, right_op, paren in tokens_raw:
+        for number, left_op, right_op, paren, constant, function in tokens_raw:
             if number:
                 tokens.append(Token(value=float(number), type='NUMBER', precedence=None, associativity=None))
             elif left_op:
@@ -63,5 +65,14 @@ class Parser:
                     tokens.append(Token(value=paren, type='LPAREN', precedence=None, associativity=None))
                 else:
                     tokens.append(Token(value=paren, type='RPAREN', precedence=None, associativity=None))
+                    
+            elif constant:
+                if constant == "pi":
+                    tokens.append(Token(value=math.pi, type="NUMBER", precedence=None, associativity=None))
+                elif constant == "e":
+                    tokens.append(Token(value=math.e, type="NUMBER", precedence=None, associativity=None))
+
+            elif function:
+                tokens.append(Token(value=function, type="FUNCTION", precedence=None, associativity=None))
         
         return self._to_rpn(tokens)
