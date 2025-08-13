@@ -4,6 +4,14 @@ from .constants import Token
 import math 
 
 class Evaluator:
+    """
+    A class to evaluate Reverse Polish Notation (RPN) expressions
+
+    Methods:
+        evaluate(tokens: List[Token]) -> float:
+            Evaluates a list of tokens in RPN and returns the result.   
+    """
+
     _operations = {
         "+": lambda y, x: y + x,
         "-": lambda y, x: y - x,
@@ -28,7 +36,7 @@ class Evaluator:
         "fact": lambda x: math.factorial(int(x)),
     }
     
-    def evaluate(self, tokens: List[Token]) -> float:
+    def evaluate(self, tokens: List[Token]) -> float:        
         stack = []
 
         for token in tokens:

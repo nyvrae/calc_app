@@ -5,10 +5,24 @@ from typing import List
 import math
 
 class Parser:
+    """
+    A class to parse arithmetic expressions and convert them into 
+    Reverse Polish Notation (RPN) using the Shunting Yard algorithm.
+
+    Methods:
+        parse(expression: str) -> List[Token]:
+            Parses an infix expression string and returns a list of tokens 
+            in RPN order.
+
+        _to_rpn(tokens: List[Token]) -> List[Token]:
+            Internal method that applies the Shunting Yard algorithm 
+            to a list of tokens and returns the RPN output queue.
+    """
+
     def __init__(self):
         self._pattern = re.compile(r"(\d+\.?\d*)|([+\-*/])|(\^)|([()])|(pi|e)|([a-zA-Z_][a-zA-Z_]*)")
         
-    def _to_rpn(self, tokens: List[Token]) -> List[Token]:
+    def _to_rpn(self, tokens: List[Token]) -> List[Token]:    
         output_queue = []
         operator_stack = []
         
