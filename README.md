@@ -1,6 +1,6 @@
 # Calculator App
 
-A command-line calculator application that supports parsing and evaluating arithmetic expressions using the **Shunting Yard algorithm** and **Reverse Polish Notation (RPN)** evaluation.
+A command-line calculator application that supports parsing and evaluating arithmetic expressions using the [**Shunting Yard algorithm**](https://en.wikipedia.org/wiki/Shunting_yard_algorithm) and [**Reverse Polish Notation (RPN)** evaluation](https://www.geeksforgeeks.org/dsa/evaluate-the-value-of-an-arithmetic-expression-in-reverse-polish-notation-in-java/).
 
 ## ✨ Features
 
