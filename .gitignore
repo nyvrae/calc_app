@@ -1,12 +1,11 @@
-__pycache__/
+**/__pycache__/
 *.py[cod]
-*$py.class
 
 .env/
 .venv/
 venv/
 
-poetry.lock
+# poetry.lock
 
 build/
 dist/
@@ -14,4 +13,3 @@ dist/
 
 .idea/
 .vscode/
-.DS_Store
