@@ -1,2 +1,17 @@
 __pycache__/
 *.py[cod]
+*$py.class
+
+.env/
+.venv/
+venv/
+
+poetry.lock
+
+build/
+dist/
+*.egg-info/
+
+.idea/
+.vscode/
+.DS_Store
