@@ -20,7 +20,7 @@ class Parser:
     """
 
     def __init__(self):
-        self._pattern = re.compile(r"(\d+\.?\d*)|([+\-*/])|(\^)|([()])|(pi|e)|([a-zA-Z_][a-zA-Z_]*)")
+        self._pattern = re.compile(r"(\d+\.?\d*)|([+\-*/])|(\^)|([()])|(exp)|(pi|e)|([a-zA-Z_][a-zA-Z_]*)")
         
     def _to_rpn(self, tokens: List[Token]) -> List[Token]:    
         output_queue = []
@@ -65,7 +65,7 @@ class Parser:
         
         tokens = []
 
-        for number, left_op, right_op, paren, constant, function in tokens_raw:
+        for number, left_op, right_op, paren, exponent, constant, function in tokens_raw:
             if number:
                 tokens.append(Token(value=float(number), type='NUMBER', precedence=None, associativity=None))
             elif left_op:
@@ -86,7 +86,9 @@ class Parser:
                 elif constant == "e":
                     tokens.append(Token(value=math.e, type="NUMBER", precedence=None, associativity=None))
 
-            elif function:
-                tokens.append(Token(value=function, type="FUNCTION", precedence=None, associativity=None))
-        
+            elif function or exponent:
+                if function:
+                    tokens.append(Token(value=function, type="FUNCTION", precedence=None, associativity=None))
+                else:
+                    tokens.append(Token(value=exponent, type="FUNCTION", precedence=None, associativity=None))
         return self._to_rpn(tokens)
