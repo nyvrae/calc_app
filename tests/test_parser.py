@@ -129,14 +129,14 @@ def test_complex_expression(parser):
     assert len(tokens) > 5
     assert any(t.type == "FUNCTION" for t in tokens)
 
-# @pytest.mark.parametrize(
-#     "expression",
-#     [
-#         "1 + ",
-#         "(1 + 2",
-#         "3 + * 4",
-#     ]
-# )
-# def test_invalid_expressions(parser, expression):
-#     with pytest.raises(Exception):
-#         parser.parse(expression)
+@pytest.mark.parametrize(
+    "expression, expected_exception",
+    [
+        ("1 + ", "Invalid_expression"),
+        ("(1 + 2", "Unbalanced_parentheses"),
+        ("3 + * 4", "Consecutive_operators"),
+    ]
+)
+def test_invalid_expressions(parser, expression, expected_exception):
+    with pytest.raises(Exception, match=expected_exception):
+        parser.parse(expression)

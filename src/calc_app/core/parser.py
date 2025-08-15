@@ -25,6 +25,27 @@ class Parser:
 
     def __init__(self):
         self._pattern = re.compile(r"(\d+\.?\d*)|([+\-*/])|(\^)|([()])|(sin|cos|tan|sqrt|log|ln|abs|exp|asin|acos|atan|to_degrees|to_radians|fact)|(pi|e)")
+    
+    def _check_validity(self, tokens: List[Token]):
+        balance = 0
+        t_prev = None
+        for _, t in enumerate(tokens):
+            if t.type == "LPAREN":
+                balance += 1
+            elif t.type == "RPAREN":
+                balance -= 1
+            
+            if balance < 0:
+                raise ValueError("Unbalanced_parentheses")
+            if t.type == t_prev == "OPERATOR":
+                raise ValueError("Consecutive_operators")
+            
+            t_prev = t.type
+        if tokens[-1].type != "RPAREN" and tokens[-1].type != "NUMBER":
+            raise ValueError("Invalid_expression")
+        if balance != 0:
+            raise ValueError("Unbalanced_parentheses")
+        return 0
 
     def _tokenize(self, expression: str) -> List[Token]:
         tokens = []
@@ -90,4 +111,5 @@ class Parser:
         
         expression = expression.replace(' ', '')
         tokens = self._tokenize(expression)
+        self._check_validity(tokens)
         return self._to_rpn(tokens)

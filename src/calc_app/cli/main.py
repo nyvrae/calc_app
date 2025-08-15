@@ -14,7 +14,7 @@ def main():
         if not tokens:
             raise ValueError("Invalid expression")
         
-        print("Tokens:", [token for token in tokens])
+        # print("Tokens:", [token for token in tokens])
         
         result = evaluator.evaluate(tokens)
         

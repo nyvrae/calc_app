@@ -89,21 +89,14 @@ def test_complex_expression(evaluator):
     ]
     assert abs(evaluator.evaluate(tokens) - (2 * (3 + 4) ** 2 / 7)) < 1e-10
 
-# def test_error_handling(evaluator):
-#     tokens_div_by_zero = [
-#         Token(5.0, "NUMBER"),
-#         Token(0.0, "NUMBER"),
-#         Token("/", "OPERATOR")
-#     ]
-#     with pytest.raises(ZeroDivisionError, match="Division by zero"):
-#         evaluator.evaluate(tokens_div_by_zero)
+def test_error_handling(evaluator):
+    tokens_div_by_zero = [
+        Token(5.0, "NUMBER"),
+        Token(0.0, "NUMBER"),
+        Token("/", "OPERATOR")
+    ]
+    with pytest.raises(ZeroDivisionError, match="Division by zero"):
+        evaluator.evaluate(tokens_div_by_zero)
 
-#     with pytest.raises(ValueError, match="Invalid expression"):
-#         evaluator.evaluate([])
-
-#     tokens_invalid_expr = [
-#         Token(1.0, "NUMBER"),
-#         Token("+", "OPERATOR")
-#     ]
-#     with pytest.raises(IndexError):
-#         evaluator.evaluate(tokens_invalid_expr)
+    with pytest.raises(ValueError, match="Invalid expression"):
+        evaluator.evaluate([])

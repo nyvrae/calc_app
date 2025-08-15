@@ -16,7 +16,7 @@ class Evaluator:
         "+": lambda y, x: y + x,
         "-": lambda y, x: y - x,
         "*": lambda y, x: y * x,
-        "/": lambda y, x: y / x if x != 0 else (_ for _ in ()).throw(ZeroDivisionError("Error: division by zero")),
+        "/": lambda y, x: y / x if x != 0 else (_ for _ in ()).throw(ZeroDivisionError("Division by zero")),
         "^": lambda y, x: y ** x
     }
     _functions = {
