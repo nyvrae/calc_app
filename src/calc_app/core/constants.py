@@ -1,6 +1,12 @@
-from collections import namedtuple
+from dataclasses import dataclass
+from typing import Optional
 
-Token = namedtuple('Token', ['value', 'type', 'precedence', 'associativity'])
+@dataclass(frozen=True)
+class Token:
+    value: float | str
+    type: str
+    precedence: Optional[int] = None
+    associativity: Optional[str] = None
 
 OPERATOR_PRECEDENCE = {
     '+': 2,
@@ -8,4 +14,6 @@ OPERATOR_PRECEDENCE = {
     '*': 3,
     '/': 3,
     '^': 4,
+    "u-": 5,
+    "u+":  5
 }

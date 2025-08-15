@@ -34,6 +34,8 @@ class Evaluator:
         "to_degrees": lambda x: math.degrees(x),
         "to_radians": lambda x: math.radians(x),
         "fact": lambda x: math.factorial(int(x)),
+        "uminus": lambda x: -x,
+        "uplus": lambda x: +x,
     }
     
     def evaluate(self, tokens: List[Token]) -> float:        
@@ -51,5 +53,8 @@ class Evaluator:
                 y = stack.pop()
                 
                 stack.append(self._operations[token.value](y, x))
+
+        if not stack:
+            raise ValueError("Invalid expression")
 
         return stack[0]
