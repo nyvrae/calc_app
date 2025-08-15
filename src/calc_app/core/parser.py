@@ -24,7 +24,7 @@ class Parser:
     """
 
     def __init__(self):
-        self._pattern = re.compile(r"(\d+\.?\d*)|([+\-*/])|(\^)|([()])|(sin|cos|tan|sqrt|log|ln|abs|exp|asin|acos|atan|to_degrees|to_radians|fact)|(pi|e)")
+        self._pattern = re.compile(r"(\d+\.?\d*)|([+\-*/])|(\^)|([()])|(sin|cos|tan|sqrt|log|ln|abs|exp|asin|acos|atan|to_degrees|to_radians|fact)|(pi|e)|([a-zA-Z_][a-zA-Z_]*)")
     
     def _check_validity(self, tokens: List[Token]):
         balance = 0
@@ -51,7 +51,7 @@ class Parser:
         tokens = []
         tokens_raw = re.findall(self._pattern, expression)
 
-        for number, op, power, paren, func, constant in tokens_raw:
+        for number, op, power, paren, func, constant, unknown_token in tokens_raw:
             is_unary = op and op in "+-" and (not tokens or tokens[-1].type in ["OPERATOR", "LPAREN"])
 
             if number:
@@ -69,6 +69,8 @@ class Parser:
                 tokens.append(Token(value, "NUMBER"))
             elif func:
                 tokens.append(Token(func, "FUNCTION"))
+            elif unknown_token:
+                raise ValueError("Invalid_expression")
         return tokens
 
     def _to_rpn(self, tokens: List[Token]) -> List[Token]:    
@@ -81,11 +83,12 @@ class Parser:
             elif token.type == "FUNCTION":
                 op_stack.append(token)
             elif token.type == "OPERATOR":
-                while op_stack and (op_stack[-1].type != "LPAREN") and (
-                OPERATOR_PRECEDENCE.get(op_stack[-1].value) > OPERATOR_PRECEDENCE.get(token.value, 0)
-                or (
-                    token.associativity == "left" and 
-                    OPERATOR_PRECEDENCE.get(op_stack[-1].value) == OPERATOR_PRECEDENCE.get(token.value, 0)
+                while op_stack and op_stack[-1].type != "LPAREN" and (
+                    op_stack[-1].type == "OPERATOR" and OPERATOR_PRECEDENCE.get(op_stack[-1].value) > OPERATOR_PRECEDENCE.get(token.value, 0)
+                    or (
+                        token.associativity == "left" and 
+                        op_stack[-1].type == "OPERATOR" and 
+                        OPERATOR_PRECEDENCE.get(op_stack[-1].value) == OPERATOR_PRECEDENCE.get(token.value, 0)
                     )
                 ):
                     output.append(op_stack.pop())

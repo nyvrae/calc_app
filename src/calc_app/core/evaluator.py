@@ -53,6 +53,8 @@ class Evaluator:
                 y = stack.pop()
                 
                 stack.append(self._operations[token.value](y, x))
+            else:
+                raise ValueError(f"Invalid token: {token}")
 
         if not stack:
             raise ValueError("Invalid expression")
