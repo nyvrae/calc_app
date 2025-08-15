@@ -3,7 +3,6 @@ from calc_app.core.parser import Parser, Token
 
 @pytest.fixture
 def parser():
-    """Fixture providing a Parser instance for all tests."""
     return Parser()
 
 @pytest.mark.parametrize(
@@ -15,7 +14,10 @@ def parser():
         ("8 / 2", 3),
         ("2 ^ 3", 3),
         ("2 + 3 * 4", 5),
+        ("2 * 3 + 4", 5),
         ("2 + 3 ^ 2 * 4", 7),
+        ("  10   +  5 ", 3),
+        ("100/  10", 3),
     ]
 )
 def test_basic_operations(parser, expression, expected_len):
@@ -68,7 +70,6 @@ def test_constants(parser, expression, expected_values):
 )
 def test_functions(parser, expression, function_name):
     tokens = parser.parse(expression)
-    print(t.value for t in tokens)
     assert any(t.type == "FUNCTION" and t.value == function_name for t in tokens)
 
 def test_nested_functions(parser):
@@ -96,6 +97,31 @@ def test_mixed_expression(parser):
     for func in ["sin", "log", "sqrt"]:
         assert func in function_names
     assert any(t.type == "NUMBER" for t in tokens)
+
+@pytest.mark.parametrize(
+    "expression, expected_tokens",
+    [
+        ("-5", [Token(value=5.0, type='NUMBER'), Token(value='u-', type='FUNCTION')]),
+        ("+10", [Token(value=10.0, type='NUMBER'), Token(value='u+', type='FUNCTION')]),
+        ("2 * (-3)", [
+            Token(value=2.0, type='NUMBER'),
+            Token(value=3.0, type='NUMBER'),
+            Token(value='u-', type='FUNCTION'),
+            Token(value='*', type='OPERATOR')
+        ]),
+        ("5 + (+2)", [
+            Token(value=5.0, type='NUMBER'),
+            Token(value=2.0, type='NUMBER'),
+            Token(value='u+', type='FUNCTION'),
+            Token(value='+', type='OPERATOR'),
+        ]),
+    ]
+)
+def test_unary_operators(parser, expression, expected_tokens):
+    tokens = parser.parse(expression)
+    for actual, expected in zip(tokens, expected_tokens):
+        assert actual.type == expected.type
+        assert actual.value == expected.value
 
 def test_complex_expression(parser):
     expr = "3 + 5 * (6 + 10 - sin(5))"
