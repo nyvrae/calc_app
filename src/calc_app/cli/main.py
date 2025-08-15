@@ -3,9 +3,9 @@ from ..core.evaluator import Evaluator
 
 def main():
     try:
-        user_input = input()
+        user_input = input("Enter an expression: ")
         if not user_input:
-            raise ValueError("Please enter an expression")
+            raise ValueError("Please enter an expression: ")
         
         parser = Parser()
         evaluator = Evaluator()
