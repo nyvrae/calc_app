@@ -12,6 +12,10 @@ def evaluator():
         ([Token(3.0, "NUMBER"),
           Token(4.0, "NUMBER"),
           Token("+", "OPERATOR")], 7.0),
+        
+        ([Token(3.55, "NUMBER"),
+          Token(4.66, "NUMBER"),
+          Token("+", "OPERATOR")], 8.21),
 
         ([Token(3.0, "NUMBER"),
           Token(4.0, "NUMBER"),
